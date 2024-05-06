@@ -1,0 +1,299 @@
+﻿@model CarLab.Models.CommonEntities.BasicDataModel
+
+
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">@(Model != null && Model.productsObj != null ? Model.productsObj.ProductName : "Product Title")</h4>
+            <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row gutter-40 col-mb-80">
+                <div class="postcontent col-lg-12 order-lg-last">
+
+                    <div class="single-product">
+                        <div class="product">
+                            <div class="row gutter-40">
+
+                                <div class="col-md-6">
+
+                                    <!-- Product Single - Gallery
+                                    ============================================= -->
+                                    <div class="product-image">
+                                        <div class="fslider" data-pagi="false" data-arrows="false" data-thumbs="true">
+                                            <div class="flexslider">
+                                                <div class="slider-wrap" data-lightbox="gallery">
+                                                    <div class="slide" data-thumb="images/shop/thumbs/dress/3.jpg"><a href="images/shop/dress/3.jpg" title="Pink Printed Dress - Front View" data-lightbox="gallery-item"><img src="images/shop/dress/3.jpg" alt="Pink Printed Dress"></a></div>
+                                                    @{
+                                                        if (Model != null && Model.productsObj != null && Model.productsObj.ProductImage != null)
+                                                        {
+                                                            string bitString = BitConverter.ToString(Model.productsObj.ProductImage);
+                                                            if (bitString == "00" || bitString == "")
+                                                            {
+
+
+                                                                <a href="images/shop/dress/3.jpg" title="@Model.productsObj.ProductName" data-lightbox="gallery-item">
+                                                                    <img src="~/themeContent/customer/demos/restaurant/images/menu/breakfast/1.jpg" alt="1">
+                                                                </a>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                string imageBase64Data = Convert.ToBase64String(Model.productsObj.ProductImage);
+                                                                string imageDataURL = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                                                                <a href="#!" title="@Model.productsObj.ProductName" data-lightbox="gallery-item">
+                                                                    <img src="@imageDataURL" alt="1">
+                                                                </a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/themeContent/customer/demos/restaurant/images/menu/breakfast/1.jpg" alt="1">
+                                                        }
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @* <div class="sale-flash badge bg-danger p-2">Sale!</div>*@
+                                    </div><!-- Product Single - Gallery End -->
+
+                                </div>
+
+                                <div class="col-md-6 product-desc">
+
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                        <!-- Product Single - Price
+                                        ============================================= -->
+                                        @{
+                                            if (Model != null && Model.productsObj != null)
+                                            {
+                                                <div class="product-price">$ @Model.productsObj.Price per Day</div>
+
+                                                <!-- Product Single - Price End -->
+                                            }
+                                            else
+                                            {
+                                                <div class="product-price"> <ins>$ Not Confirm</ins></div>
+
+                                                <!-- Product Single - Price End -->
+                                            }
+                                        }
+
+
+                                    </div>
+
+
+                                    <div class="line"></div>
+                                    <h3>Period</h3>
+                                    <div class="row pb-3">
+                                        <div class="col-6">
+                                            <input type="date" class="form-control" id="dateFrom" />
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="date" class="form-control" id="dateTo" />
+                                        </div>
+                                    </div>
+
+
+                                    <h4 id="daysDifference"></h4>
+
+
+                                    <div class="line"></div>
+
+                                    <h3 class="pb-1 m-0">Cost</h3>
+                                    <div class="pb-5">
+                                        <input type="checkbox" id="insuranceCheckBox" class="mr-2" />
+                                        <span id="insurance"></span>
+                                    </div>
+                    
+
+
+                                    <div class="row">
+                                        <div class="col-6">Total:</div>
+                                        <div class="col-6"><span id="total"></span></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">Early booking discount:</div>
+                                        <div class="col-6"><span id="earlyBookingDiscount"></span></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6"><b>Grand Total:</b></div>
+                                        <div class="col-6"><b id="grandTotal">$ 1330.00</b></div>
+                                    </div>
+
+                                    <script>
+                                        var dateFromInput = document.getElementById('dateFrom');
+                                        var dateToInput = document.getElementById('dateTo');
+                                        var insuranceCheckBox = document.getElementById('insuranceCheckBox');
+
+
+                                        // Disable input date from to pick earlier dates than today
+                                        dateFromInput.min = new Date().toISOString().split('T')[0];
+
+                                        // Display default values
+                                        document.getElementById('daysDifference').textContent = '0 days'
+                                        document.getElementById('total').textContent = '$ 0'
+                                        document.getElementById('insurance').textContent = 'Insurance $ 0'
+                                        document.getElementById('earlyBookingDiscount').textContent = '- $ 0'
+                                        document.getElementById('grandTotal').textContent = '$ 0'
+
+                                        // Set the max date of dateFromInput to be one day less than dateToInput
+                                        dateFromInput.addEventListener('input', function () {
+                                            dateToInput.min = this.value;
+                                            calculateDays(dateFromInput.value, dateToInput.value, insuranceCheckBox.checked);
+                                        });
+
+                                        // Set the min date of dateToInput to be one day more than dateFromInput
+                                        dateToInput.addEventListener('input', function () {
+                                            dateFromInput.max = this.value;
+                                            calculateDays(dateFromInput.value, dateToInput.value, insuranceCheckBox.checked);
+                                        });
+
+
+                                        // Set the min date of dateToInput to be one day more than dateFromInput
+                                        insuranceCheckBox.addEventListener('change', function () {
+                                            calculateDays(dateFromInput.value, dateToInput.value, insuranceCheckBox.checked);
+
+                                        });
+
+
+
+                                        function calculateDays(dateFrom, dateTo, isInsuranceChecked) {
+                                            // If we don't have date values return
+                                            if (!(dateFrom && dateTo)) {
+                                                return;
+                                            }
+
+
+                                            var startDate = new Date(dateFrom);
+                                            var endDate = new Date(dateTo);
+
+                                            // Calculate the difference in milliseconds between the two dates
+                                            var difference = endDate.getTime() - startDate.getTime();
+
+
+                                            var isDiscount = false;
+                                            
+
+                                            // Check if it is elibile for discount todays date - start date >= 5 days
+                                            if (Math.ceil((startDate.getTime() - new Date().getTime()) / (1000 * 3600 * 24)) > 5) {
+                                                isDiscount = true;
+                                            }
+
+                                        
+
+                                            // Convert milliseconds to days
+                                            var daysDifference = Math.ceil(difference / (1000 * 3600 * 24));
+
+                                            // Display the result
+                                            var daysDifferenceElement = document.getElementById('daysDifference');
+
+                                            var dayText = ' days';
+                                            if (daysDifference == 1) {
+                                                dayText = ' day';
+                                            }
+
+                                            daysDifferenceElement.textContent = daysDifference.toString() + dayText;
+
+                                            calculateAmountProperties(daysDifference, isInsuranceChecked, isDiscount);
+
+                                        }
+
+                                        function calculateAmountProperties(daysDifference, isInsuranceChecked, isDiscount) {
+
+                                            // Caluclate Insurance
+                                            var insurance = Number((daysDifference * @Model.productsObj.Price * 0.05).toFixed(2));
+                                            document.getElementById('insurance').textContent = 'Insurance $ ' + insurance.toString();
+
+                                            // If insurance is unchecked don't calculate it to total
+                                            if(!isInsuranceChecked){
+                                                insurance = 0;
+                                            }
+
+                                            // Calculate Total
+                                            var totalAmountWithInsurance = daysDifference * @Model.productsObj.Price + insurance;
+                                            var totalAmountWithouthInsurance = daysDifference * @Model.productsObj.Price;
+                                            document.getElementById('total').textContent = '$ ' + totalAmountWithInsurance.toString();
+
+
+                                            // Calculate Discount
+                                            var discountAmount = 0;
+                                            
+                                            if (isDiscount){
+                                                discountAmount = totalAmountWithouthInsurance * 0.15
+                                                document.getElementById('earlyBookingDiscount').textContent = '- $ ' + discountAmount.toString();
+                                            } else {
+                                                document.getElementById('earlyBookingDiscount').textContent = '- $ 0'
+                                            }
+
+                                            // Calculate Grand total
+                                            var grandTotalAmount = totalAmountWithInsurance - discountAmount;
+                                            document.getElementById('grandTotal').textContent = '$ ' + grandTotalAmount;
+
+                                            window.sharedVariable = grandTotalAmount;
+                                        }
+
+                                    </script>
+
+
+                                    <div class="line"></div>
+
+                                    <!-- Product Single - Quantity & Cart Button
+                                    ============================================= -->
+                                    <form class="cart mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
+                                        @{
+                                            int ProductID = Model != null && Model.productsObj != null ? Model.productsObj.ProductID : 0;
+                                        }
+                                        <button type="button" onclick="AddToCart('@ProductID')" class="add-to-cart button m-0 w-100">Book Now</button>
+                                    </form><!-- Product Single - Quantity & Cart Button End -->
+
+
+                                    <div class="line"></div>
+
+
+
+
+
+                                    <!-- Product Single - Meta
+                                    ============================================= -->
+                                    <div class="card product-meta">
+                                        <div class="card-body">
+
+                                            <span class="posted_in">Make: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.MakeName : " ")</a>.</span>
+                                            <span class="posted_in">Model: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.ModelName : " ")</a>.</span>
+                                            <span class="posted_in">Color: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.ColorName : " ")</a>.</span>
+                                            <span class="posted_in">Year: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.ProductYear : " ")</a>.</span>
+                                            <span class="posted_in">Location: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.LocationName : " ")</a>.</span>
+                                            <span class="posted_in">Fuel Type: <a href="#" rel="tag"> @(Model != null && Model.productsObj != null ? Model.productsObj.FuelType : " ")</a>.</span>
+
+                                        </div>
+                                    </div><!-- Product Single - Meta End -->
+
+
+                                </div>
+
+                                <div class="w-100"></div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
