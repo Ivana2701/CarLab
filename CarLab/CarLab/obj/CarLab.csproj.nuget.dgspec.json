@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ibazhdarova/Downloads/CarLabProject-main/CarLab/CarLab/CarLab.csproj": {}
+    "/Users/dimitarbazhdarov/Downloads/CarLab/CarLab/CarLab/CarLab.csproj": {}
   },
   "projects": {
-    "/Users/ibazhdarova/Downloads/CarLabProject-main/CarLab/CarLab/CarLab.csproj": {
+    "/Users/dimitarbazhdarov/Downloads/CarLab/CarLab/CarLab/CarLab.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ibazhdarova/Downloads/CarLabProject-main/CarLab/CarLab/CarLab.csproj",
+        "projectUniqueName": "/Users/dimitarbazhdarov/Downloads/CarLab/CarLab/CarLab/CarLab.csproj",
         "projectName": "CarLab",
-        "projectPath": "/Users/ibazhdarova/Downloads/CarLabProject-main/CarLab/CarLab/CarLab.csproj",
-        "packagesPath": "/Users/ibazhdarova/.nuget/packages/",
-        "outputPath": "/Users/ibazhdarova/Downloads/CarLabProject-main/CarLab/CarLab/obj/",
+        "projectPath": "/Users/dimitarbazhdarov/Downloads/CarLab/CarLab/CarLab/CarLab.csproj",
+        "packagesPath": "/Users/dimitarbazhdarov/.nuget/packages/",
+        "outputPath": "/Users/dimitarbazhdarov/Downloads/CarLab/CarLab/CarLab/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/ibazhdarova/.nuget/NuGet/NuGet.Config"
+          "/Users/dimitarbazhdarov/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8"
@@ -97,7 +97,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
